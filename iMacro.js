@@ -21,12 +21,12 @@
 		window = unsafeWindow,		
 			//many window operations are unavailable due to safety considerations
 			//unsafeWindow allows us to override this and use console.log, alert etc
-		document = realwindow.document,
+		document = realwindow.content.document,
 			//accessing the DOM, however, requires using the real document
 		on = true, off = false, ON = on, OFF = off, On = on, Off = off, //for convenience
 		debug = off, //switch for debugging mode (on=true or off=false)
 		wait = {
-			value: undefined, //holds current wait value (changes)
+			value: 0.5, //holds current wait value (changes)
 			step: 0.25, //holds step interval for incrementing wait time
 			atad: 0.25, //holds shortest wait
 			asec: 1, //holds short wait
@@ -71,6 +71,7 @@
 				attributes = {};
 
 			//get tag attribute names and values
+				log(elem.attributes);
 				for (var j=0; j<elem.attributes.length ; j++){
 					attributes[elem.attributes[j].name] = elem.attributes[j].nodeValue;
 				}
@@ -177,9 +178,12 @@
 			try{
 				node = document.querySelectorAll(selector) || document.querySelector(selector);
 			} catch(e){
-				iimPlay("CODE: TAB OPEN \n TAB T=2 \n TAB CLOSE \n TAB T=1");
+				//iimPlay("CODE: TAB OPEN \n TAB T=2 \n TAB CLOSE \n TAB T=1");
+				//realwindow = realwindow;
+				//document = realwindow.document;
 				realwindow = realwindow;
-				document = realwindow.document;
+				realwindow.document.domain = realwindow.document.domain;
+				var document = realwindow.document;
 				node = document.querySelectorAll(selector) || document.querySelector(selector);
 			}
 			//Use POS if more than one element is selected, and dlog
@@ -207,7 +211,7 @@
 
 /*--------------------- Tag Constructor ---------------------*/
 
-	var Tag = function(s){ //accepts a spec object
+	var Tag = function(s){ //accepts a spec object (type, attr, pos)
 
 		this.tag = "TAG "+ s.pos + " " + s.type + " " + s.attr;
 		
@@ -388,9 +392,7 @@
 				//check for a disabled dropdown
 
 			};
-			this.notLoaded = function(){
-				return !this.isLoaded();
-			};
+			this.notLoaded = function(){ return !this.isLoaded(); };
 
 			this.chooseCarefully = function(chooseby, choice){
 				var thismethod = this.chooseCarefully;
@@ -416,6 +418,7 @@
 		// --------------------- FORM-SPECIFIC ---------------------
 
 		this.input = function(){
+			//incomplete
 			if(this.playAll){ play(this._current); }
 		};
 
@@ -431,7 +434,7 @@ var Year = $M("select",1),
 	Make = $M("select",2),
 	Model = $M("select",3),
 	Options = $M("select",4);
-
+	SubmitButton = $M("#plc_lt_zoneContent_PagePlaceholder_PagePlaceholder_lt_zoneTopLeft_HomeSearchControl_NSCNormalSearch_btnFindTires",1);
 var x = [],
 	finaldata = [],
 	
@@ -450,24 +453,19 @@ attempt.o = 0;
 	var y=2, mk=3, md=2, o=1;
 	document.domain = document.domain;
 
-	/*
-	chooseYear();
-	extractMake();
-	chooseMake();
-	extractModel();
-	chooseModel();
-	extractOptions();
-	chooseOptions();
-	*/
+	
 	Year.extractAll();
-	Year.chooseCarefully("index",5);
+	Year.chooseCarefully("index",6);
 	Make.extractAll();
 	Make.chooseCarefully("index",5);
-	/*
 	Model.extractAll();
 	Model.chooseCarefully("index",1);
 	Options.extractAll();
-	Options.chooseCarefully("index",0);
-	*/
+	Options.chooseCarefully("index",1);
+	SubmitButton.click();
+	pause();
+	var document = realwindow.document;
+	//document.domain = document.domain;
+	log(document);
 
 //};
