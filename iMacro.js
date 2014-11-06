@@ -59,6 +59,22 @@
 				log("PAUSE, " + defaultpause + " sec");
 			}
 		},
+		isDocAlive = function(){ //checks if document is dead or alive
+		try{ 
+			document.toString();
+			return "alive"; //document is alive!
+		}catch(e){ 
+			return "dead"; //document in need of CPR...
+		}
+		},
+		keepAlive = function(){
+			log(document);
+			if(isDocAlive()=="dead"){
+				var document = realwindow.document;
+				log("Document CPR. Document is now " + isDocAlive())
+				log(document);
+			}
+		},
 		play = function(m){
 			//this.macro = m || _current;
 			dlog("______________PLAY______________ \n" + m + "\n"); 
@@ -397,7 +413,7 @@
 			this.chooseCarefully = function(chooseby, choice){
 				var thismethod = this.chooseCarefully;
 				while(this.notLoaded() && thismethod.attempt < thismethod.attemptLimit){
-					log("Not loaded...attempt "+this.method.attempt);
+					log("Not loaded...attempt "+thismethod.attempt);
 					pause();
 					wait.increment();
 					thismethod.attempt++;
@@ -463,9 +479,11 @@ attempt.o = 0;
 	Options.extractAll();
 	Options.chooseCarefully("index",1);
 	SubmitButton.click();
-	pause();
-	var document = realwindow.document;
+	pause(3);
+	//var document = realwindow.document;
 	//document.domain = document.domain;
+	log(document);
+	var document = realwindow.document;
 	log(document);
 
 //};
