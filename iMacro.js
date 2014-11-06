@@ -1,4 +1,4 @@
-﻿/*__________________ Define unsafeWindow __________________*/
+/*__________________ Define unsafeWindow __________________*/
 
 // iMacro prevents access to the window object of the browser, so we 
 // must force access by creating an unsafeWindow
@@ -60,20 +60,32 @@
 			}
 		},
 		isDocAlive = function(){ //checks if document is dead or alive
-		try{ 
-			document.toString();
-			return "alive"; //document is alive!
-		}catch(e){ 
-			return "dead"; //document in need of CPR...
-		}
-		},
-		keepAlive = function(){
-			log(document);
-			if(isDocAlive()=="dead"){
-				var document = realwindow.document;
-				log("Document CPR. Document is now " + isDocAlive())
-				log(document);
+			try{ 
+				try{
+					dlog(document.body.attributes);
+					log("alive...document is ");
+					log(document);
+				}catch(e){
+					log("dead...document is "); 
+					log(document); 
+					return "dead"; 
+				}
+				return "alive"; //document is alive!
+			}catch(e){ 
+				//log(e);
+				log("dead");
+				try{log(document.body.attributes);}catch(e){log("dead...document is"); log(document);}
+				return "dead"; //document in need of CPR...
 			}
+		},
+      	keepAlive = function (){
+			log("keepalive");
+			if(isDocAlive()=="dead"){
+				document = realwindow.document;
+				log("Document CPR....");
+				log(document);
+    
+			};
 		},
 		play = function(m){
 			//this.macro = m || _current;
@@ -423,7 +435,7 @@
 				} else {
 					throw "Still Loading";
 				}
-				wait.reset;
+				wait.reset();
 				thisattempt = 0;
 			};
 
@@ -480,10 +492,7 @@ attempt.o = 0;
 	Options.chooseCarefully("index",1);
 	SubmitButton.click();
 	pause(3);
-	//var document = realwindow.document;
-	//document.domain = document.domain;
-	log(document);
-	var document = realwindow.document;
-	log(document);
+	keepAlive();
+	isDocAlive();
 
 //};
