@@ -6,9 +6,9 @@ JS library to make working with iMacros easier.
 =============
 General Functions
 <ul>
-	<li>debugOn()<li>debugOff()</li>
-	<li>log(message)<li>dlog(message))</li>
-	<li>alert(message)<li>dalert(message))</li>
+	<li>debugOn()	debugOff()</li>
+	<li>log(message)	dlog(message))</li>
+	<li>alert(message)	dalert(message))</li>
 	<li>reload())</li>
 	<li>pause(time) //pause immediately)</li>
 	<li>isDocAlive() //checks if document is alive)</li>
@@ -26,9 +26,9 @@ Main objects/functions)
 	<li>Tag({type, attr, pos}) --> constructor for a tag element with relevant macro functions)</li>
 	<li>PLAY<br />
 		<ul>
-			<li>.playAll<li>.playNow()<li>.playLater()<li>)</li>
+			<li>.playAll	.playNow()	.playLater()</li>
 			<li>.play(macro))</li>
-			<li>.do(macro)<li>//either store macro or play immediately depending on .playAll switch)</li>
+			<li>.do(macro)	//either store macro or play immediately depending on .playAll switch)</li>
 			<li>.click())</li>
 		</ul>
 	</li>
@@ -36,15 +36,17 @@ Main objects/functions)
 		<ul>
 			<li>.extract(extracttype, nolog))</li>
 			<li>.download(opt_screenshot))</li>
-			<li>DROPDOWN-SPECIFIC)</li>
-			<li>.extractAll(nolog) //extracts all entries in the dropdown)</li>
-			<li>.choose(chooseby, choice))</li>
-			<li>.chooseByName(choice))</li>
-			<li>.chooseByText(choice))</li>
-			<li>.chooseByIndex(choice))</li>
-			<li>.chooseCarefully(chooseby, choice) //chooses only if dropdown is loaded)</li>
-			<li>.isLoaded() //true or false)</li>
-			<li>.notLoaded() //true or false)</li>
+			<li>DROPDOWN-SPECIFIC<br />
+				<ul>
+					<li>.extractAll(nolog) //extracts all entries in the dropdown)</li>
+					<li>.choose(chooseby, choice))</li>
+					<li>.chooseByName(choice))</li>
+					<li>.chooseByText(choice))</li>
+					<li>.chooseByIndex(choice))</li>
+					<li>.chooseCarefully(chooseby, choice) //chooses only if dropdown is loaded)</li>
+					<li>.isLoaded() //true or false)</li>
+					<li>.notLoaded() //true or false)</li>
+				</ul>
 		</ul>
 	</li>
 </ul>
