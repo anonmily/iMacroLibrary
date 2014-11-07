@@ -60,22 +60,15 @@
 			}
 		},
 		isDocAlive = function(){ //checks if document is dead or alive
-			try{ 
-				try{
-					dlog(document.body.attributes);
-					log("alive...document is ");
-					log(document);
-				}catch(e){
-					log("dead...document is "); 
-					log(document); 
-					return "dead"; 
-				}
+			try{
+				dlog(document.body.attributes);
+				log("alive...document is ");
+				log(document);
 				return "alive"; //document is alive!
-			}catch(e){ 
-				//log(e);
-				log("dead");
-				try{log(document.body.attributes);}catch(e){log("dead...document is"); log(document);}
-				return "dead"; //document in need of CPR...
+			}catch(e){
+				log("dead...document is "); 
+				log(document); 
+				return "dead"; 
 			}
 		},
       	keepAlive = function (){
@@ -83,8 +76,7 @@
 			if(isDocAlive()=="dead"){
 				document = realwindow.document;
 				log("Document CPR....");
-				log(document);
-    
+				isDocAlive();
 			};
 		},
 		play = function(m){
@@ -92,18 +84,16 @@
 			dlog("______________PLAY______________ \n" + m + "\n"); 
 			iimPlay("CODE: " + m); //play macro
 		},
-		setAttribute = function(elem){ 
-			//Chooses which attribute to use for the TAG
+		setAttribute = function(elem){ //Chooses which attribute to use for the TAG
 			
 			var att, 
 				attributes = {};
 
 			//get tag attribute names and values
-				log(elem.attributes);
+				dlog(elem.attributes);
 				for (var j=0; j<elem.attributes.length ; j++){
 					attributes[elem.attributes[j].name] = elem.attributes[j].nodeValue;
 				}
-
 			//set attribute type
 				if(attributes.id) {
 					att = "ID:" + attributes.id;
@@ -207,11 +197,8 @@
 				node = document.querySelectorAll(selector) || document.querySelector(selector);
 			} catch(e){
 				//iimPlay("CODE: TAB OPEN \n TAB T=2 \n TAB CLOSE \n TAB T=1");
-				//realwindow = realwindow;
-				//document = realwindow.document;
-				realwindow = realwindow;
-				realwindow.document.domain = realwindow.document.domain;
-				var document = realwindow.document;
+				keepAlive();
+				document.domain = document.domain;
 				node = document.querySelectorAll(selector) || document.querySelector(selector);
 			}
 			//Use POS if more than one element is selected, and dlog
@@ -254,8 +241,8 @@
 			this.ex = false; //remembers whether or not an extraction is done
 
 		// .play() method and the .playAll switch, .playNow(), .playLater()
-			this.playNow = function(){this.play = true;};
-			this.playLater = function(){this.play = false;};
+			this.playNow = function(){this.playAll = true;};
+			this.playLater = function(){this.playAll = false;};
 			this.play = function(m){
 				var macro = m || this._current;
 				play(macro); //play macro
@@ -463,6 +450,7 @@ var Year = $M("select",1),
 	Model = $M("select",3),
 	Options = $M("select",4);
 	SubmitButton = $M("#plc_lt_zoneContent_PagePlaceholder_PagePlaceholder_lt_zoneTopLeft_HomeSearchControl_NSCNormalSearch_btnFindTires",1);
+
 var x = [],
 	finaldata = [],
 	
@@ -479,8 +467,6 @@ attempt.o = 0;
 //for(var y = 1; y <= 2 ; y++){
 
 	var y=2, mk=3, md=2, o=1;
-	document.domain = document.domain;
-
 	
 	Year.extractAll();
 	Year.chooseCarefully("index",6);
@@ -493,6 +479,7 @@ attempt.o = 0;
 	SubmitButton.click();
 	pause(3);
 	keepAlive();
-	isDocAlive();
 
+	var Vehicle = $M(".selected-vehicle span",1);
+	var a = Vehicle.extract();
 //};
