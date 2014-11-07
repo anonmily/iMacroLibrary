@@ -5,7 +5,7 @@ JS library to make working with iMacros easier.
 
 =============
 General Functions
-	debugOn()	debugOff()
+	debugOn()	debugOff()<br />
 	log(message)	dlog(message)
 	alert(message)	dalert(message)
 	reload()
