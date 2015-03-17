@@ -16,17 +16,19 @@
 	    })();
 	}
 
+//____________________________________________________________________
+//____________________________________________________________________
+
+(function( realwindow, window, document, iimPlay, iimGetLastExtract, iimSet, undefined) {
+
 /*--------------------- General Variables / objects ---------------------*/
-	var realwindow = window,
-		window = unsafeWindow,		
-			//many window operations are unavailable due to safety considerations
-			//unsafeWindow allows us to override this and use console.log, alert etc
-		document = realwindow.content.document,
-			//accessing the DOM, however, requires using the real document
-		on = true, off = false, ON = on, OFF = off, On = on, Off = off, //for convenience
+
+	var DOM = realwindow.document,
+		on = true, off = false,
+		ON = on, OFF = off, On = on, Off = off,
 		debug = off, //switch for debugging mode (on=true or off=false)
 		wait = {
-			value: 0.5, //holds current wait value (changes)
+			value: undefined, //holds current wait value (changes)
 			step: 0.25, //holds step interval for incrementing wait time
 			atad: 0.25, //holds shortest wait
 			asec: 1, //holds short wait
@@ -59,41 +61,22 @@
 				log("PAUSE, " + defaultpause + " sec");
 			}
 		},
-		isDocAlive = function(){ //checks if document is dead or alive
-			try{
-				dlog(document.body.attributes);
-				log("alive...document is ");
-				log(document);
-				return "alive"; //document is alive!
-			}catch(e){
-				log("dead...document is "); 
-				log(document); 
-				return "dead"; 
-			}
-		},
-      	keepAlive = function (){
-			log("keepalive");
-			if(isDocAlive()=="dead"){
-				document = realwindow.document;
-				log("Document CPR....");
-				isDocAlive();
-			}
-		},
 		play = function(m){
 			//this.macro = m || _current;
 			dlog("______________PLAY______________ \n" + m + "\n"); 
 			iimPlay("CODE: " + m); //play macro
 		},
-		setAttribute = function(elem){ //Chooses which attribute to use for the TAG
+		setAttribute = function(elem){ 
+			//Chooses which attribute to use for the TAG
 			
 			var att, 
 				attributes = {};
 
 			//get tag attribute names and values
-				dlog(elem.attributes);
 				for (var j=0; j<elem.attributes.length ; j++){
 					attributes[elem.attributes[j].name] = elem.attributes[j].nodeValue;
 				}
+
 			//set attribute type
 				if(attributes.id) {
 					att = "ID:" + attributes.id;
@@ -115,12 +98,8 @@
 		},
 		exportcsv = function(csvarray, filename){
 			var csvstring = "Data:text/csv;charset=utf-8,";
-			for(var row=0, lastrow=csvarray.length; row<lastrow; row++){
-				try{
-					csvstring += csvarray[row].replace(new RegExp(", ", 'g'), ",")+ "\n";
-				}catch(e){
-					csvstring += csvarray[row] + "\n";
-				}
+			for(var row=0; row<csvarray.length; row++){
+				csvstring += csvarray[row].replace(new RegExp(", ", 'g'), ",")+ "\n";
 			}
 			var encodedURI = encodeURI(csvstring);
 
@@ -129,9 +108,11 @@
 			a.id='download';
 			a.href = encodedURI;
 			a.download = filename +'.csv';
+			//a.onclick = "return ExcellentExport.csv(this,'this.exportcsv.string')";
 			a.innerHTML = "Download "+ filename;
 			a.style.display = "none"; //hides the new element
-			document.body.appendChild(a);
+			DOM.body.appendChild(a); //DOM manipulation requires real window object
+			
 			document.querySelector("#download").click();
 
 			log("EXPORT || " + csvarray.length + " entries | " + filename + ".csv");
@@ -181,7 +162,7 @@
 				return data;
 		};
 
-	
+alert("iMacro Library is loaded!");
 /*--------------------- MAIN iMacro OBJECT ---------------------*/
 
 	var $M = function(selector, number){
@@ -196,12 +177,12 @@
 		//GET SELECTED ELEMENT
 			selector  = String(selector);
 			try{
-				node = document.querySelectorAll(selector) || document.querySelector(selector);
+				node = DOM.querySelectorAll(selector) || DOM.querySelector(selector);
 			} catch(e){
-				//iimPlay("CODE: TAB OPEN \n TAB T=2 \n TAB CLOSE \n TAB T=1");
-				keepAlive();
-				document.domain = document.domain;
-				node = document.querySelectorAll(selector) || document.querySelector(selector);
+				iimPlay("CODE: TAB OPEN \n TAB T=2 \n TAB CLOSE \n TAB T=1");
+				realwindow = realwindow;
+				DOM = realwindow.document;
+				node = DOM.querySelectorAll(selector) || DOM.querySelector(selector);
 			}
 			//Use POS if more than one element is selected, and dlog
 			if(node.length > 1){
@@ -228,7 +209,7 @@
 
 /*--------------------- Tag Constructor ---------------------*/
 
-	var Tag = function(s){ //accepts a spec object (type, attr, pos)
+	var Tag = function(s){ //accepts a spec object
 
 		this.tag = "TAG "+ s.pos + " " + s.type + " " + s.attr;
 		
@@ -243,8 +224,8 @@
 			this.ex = false; //remembers whether or not an extraction is done
 
 		// .play() method and the .playAll switch, .playNow(), .playLater()
-			this.playNow = function(){this.playAll = true;};
-			this.playLater = function(){this.playAll = false;};
+			this.playNow = function(){this.play = true;};
+			this.playLater = function(){this.play = false;};
 			this.play = function(m){
 				var macro = m || this._current;
 				play(macro); //play macro
@@ -275,15 +256,7 @@
 					}
 
 					//if there's only one (or no) entry in the extraction array, return a string instead.
-					if(this.exResult.length <= 1){
-						try{
-							this.exResult = this.exResult[0].toString();
-						}catch(e){
-							//otherwise if error (exResult[0] undefined), return empty string
-							this.exResult = ""; 
-						}
-						
-					}
+					if(this.exResult.length <= 1){this.exResult = this.exResult[0].toString();}
 
 					//turn off extraction switch
 					this.ex = false;
@@ -352,7 +325,7 @@
 		if(this.type == "SELECT"){ 
 
 			this.extractAll = function(nolog){
-				return this.extract("ALL",nolog);
+				this.extract("ALL",nolog);
 			};
 		
 			this.choose = function(chooseby, choice){
@@ -394,10 +367,7 @@
 						break;
 				}
 				this.do( this.tag + " CONTENT=" + type + value + "\n" );
-				if(this.playAll){
-					this.current = this.extract("TXT", "nolog");
-				}
-				log("CHOOSE || Intended: " + desired + " | Chosen: " + this.current);
+				log("CHOOSE || Intended: " + desired + " | Chosen: " + this.extract("TXT", "nolog"));
 				return this;
 			};
 			this.chooseByName = function(choice){ this.choose("name",choice); };
@@ -420,23 +390,25 @@
 				//check for a disabled dropdown
 
 			};
-			this.notLoaded = function(){ return !this.isLoaded(); };
+			this.notLoaded = function(){
+				return !this.isLoaded();
+			};
 
 			this.chooseCarefully = function(chooseby, choice){
 				var thismethod = this.chooseCarefully;
 				while(this.notLoaded() && thismethod.attempt < thismethod.attemptLimit){
-					log("Not loaded...attempt "+thismethod.attempt);
+					log("Not loaded...attempt "+this.method.attempt);
 					pause();
 					wait.increment();
 					thismethod.attempt++;
 				}
 				if(this.isLoaded()){
-					this.choose(chooseby, choice);
+					Year.choose(chooseby, choice);
 				} else {
 					throw "Still Loading";
 				}
-				wait.reset();
-				this.attempt = 0;
+				wait.reset;
+				thisattempt = 0;
 			};
 
 			this.chooseCarefully.attempt = 0;
@@ -446,10 +418,9 @@
 		// --------------------- FORM-SPECIFIC ---------------------
 
 		this.input = function(){
-			//incomplete
 			if(this.playAll){ play(this._current); }
-		};
+		};	
 		
-	}; //end Tag
+	};//end Tag constructer definition
 
-//};
+})(window, unsafeWindow, unsafeWindow.document, iimPlay, iimGetLastExtract, iimSet);
