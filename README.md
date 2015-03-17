@@ -5,58 +5,53 @@ JS library to make working with iMacros easier.
 
 =============
 General Functions
-<ul>
-	<li>debugOn()	debugOff()</li>
-	<li>log(message)	dlog(message))</li>
-	<li>alert(message)	dalert(message))</li>
-	<li>reload())</li>
-	<li>pause(time) //pause immediately)</li>
-	<li>isDocAlive() //checks if document is alive)</li>
-	<li>keepAlive())</li>
-	<li>play(m))</li>
-	<li>setAttribute(element) //chooses which attribute to use for the TAG)</li>
-	<li>exportcsv(csvarray, filename))</li>
-	<li>importcsv(file_name, line_num, fields_num))</li>
-</ul>
+* debugOn()	debugOff()
+* log(message)	dlog(message))
+* alert(message)	dalert(message))
+* reload())
+* pause(time) //pause immediately)
+* isDocAlive() //checks if document is alive)
+* keepAlive())
+* play(m))
+* setAttribute(element) //chooses which attribute to use for the TAG)
+* exportcsv(csvarray, filename))
+* importcsv(file_name, line_num, fields_num))
+
 Main objects/functions)
-<ul>
-	<li>$M(selector, number) --> returns a Tag object with the element's type, attr, position)</li>
-	<li>Accepts a CSS selector and a number (if there are more than one matching elements).)</li>
-	<li>If no number is provided and there is more than one matching element, the first match is used.)</li>
-	<li>Tag({type, attr, pos}) --> constructor for a tag element with relevant macro functions)</li>
-	<li>PLAY<br />
-		<ul>
-			<li>.playAll	.playNow()	.playLater()</li>
-			<li>.play(macro))</li>
-			<li>.do(macro)	//either store macro or play immediately depending on .playAll switch)</li>
-			<li>.click())</li>
-		</ul>
-	</li>
-	<li>EXTRACTION<br />
-		<ul>
-			<li>.extract(extracttype, nolog))</li>
-			<li>.download(opt_screenshot))</li>
-			<li>DROPDOWN-SPECIFIC<br />
-				<ul>
-					<li>.extractAll(nolog) //extracts all entries in the dropdown)</li>
-					<li>.choose(chooseby, choice))</li>
-					<li>.chooseByName(choice))</li>
-					<li>.chooseByText(choice))</li>
-					<li>.chooseByIndex(choice))</li>
-					<li>.chooseCarefully(chooseby, choice) //chooses only if dropdown is loaded)</li>
-					<li>.isLoaded() //true or false)</li>
-					<li>.notLoaded() //true or false)</li>
-				</ul>
-		</ul>
-	</li>
-</ul>
+
+* $M(selector, number) --> returns a Tag object with the element's type, attr, position)
+* Accepts a CSS selector and a number (if there are more than one matching elements).)
+* If no number is provided and there is more than one matching element, the first match is used.)
+* Tag({type, attr, pos}) --> constructor for a tag element with relevant macro functions)
+
+* PLAY<br />
+	* .playAll	.playNow()	.playLater()
+	* .play(macro))
+	* .do(macro)//either store macro or play immediately depending on .playAll switch)
+	* .click())
+
+* EXTRACTION<br />
+	* .extract(extracttype, nolog))
+	* .download(opt_screenshot))
+	* DROPDOWN-SPECIFIC<br />
+		* .extractAll(nolog) //extracts all entries in the dropdown)
+		* .choose(chooseby, choice))
+		* .chooseByName(choice))
+		* .chooseByText(choice))
+		* .chooseByIndex(choice))
+		* .chooseCarefully(chooseby, choice) //chooses only if dropdown is loaded)
+		* .isLoaded() //true or false)
+		* .notLoaded() //true or false)
+				
+		
+	
+
 =============
 
-iMacros issues/notes)</li>
-  1. Many essential window methods/properties such as window.console, window.alert, etc are blocked through iMacros. )</li>
-     An unsafeWindow can be created that overcomes this, and in the library window is redefined as unsafeWindow early on.)</li>
-     realwindow is holding the real/original window object.)</li>
-  2. Accessing DOM elements, however, requires using the real/original window object's document. )</li>
-     document = realWindow.document)</li>
-  3. Sometimes a "can't access dead object" error comes up when trying to access some property of an old document element)</li>
+iMacros issues/notes)
+1. Many essential window methods/properties such as window.console, window.alert, etc are blocked through iMacros. ) An unsafeWindow can be created that overcomes this, and in the library window is redefined as unsafeWindow early on.)
+ realwindow is holding the real/original window object.)
+2. Accessing DOM elements, however, requires using the real/original window object's document. )
+ document = realWindow.document)
+3. Sometimes a "can't access dead object" error comes up when trying to access some property of an old document element). isDocAlive() checks if the document is dead. keepAlive() checks if the document is alive and revives it if it is dead.
      
