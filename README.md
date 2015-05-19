@@ -6,7 +6,7 @@ JS library to make working with iMacros easier.
 =============
 __NOTE__
 
-I will no longer be maintaining this library. This was originally a pet project when I had just started out with web automation, and at the time I did not know about other alternatives such as Python (e.g. Splinter, Beautiful Soup), PHP cURL, or NodeJS for the same tasks. I've come back to it and refactored it a bit for a sense of closure (looking back at my old code is painful!), but there are still some issues/quirks involved with iMacros that I did not completely resolve, as well as some iMacros features that I hadn't added as well. Please feel free to send a pull request or fork the repository if you'd like to extend it!
+This was originally a pet project when I had just started out with web automation, and at the time I did not know about other alternatives such as Python (e.g. Splinter, Beautiful Soup), PHP cURL, or NodeJS for the same tasks. I've come back to it and refactored it a bit for a sense of closure (looking back at my old code is painful!), but there are still some issues/quirks involved with iMacros that I did not completely resolve, as well as some iMacros features that I hadn't added as well. As I mainly use other tools for web scraping nowadays, I will no longer be actively maintaining this library, though I might add to it occasionally. Please feel free to send a pull request or fork the repository if you'd like to extend it!
 
 When you run gulp, any new macros in the macros folder will be automatically joined with the library and put into the run folder. (I'm working on a quirk with gulp right now with the file watching...will update when its fixed! For now, if a new file is added, close (Ctrl+C) then restart gulp to have your new file compiled.)
 
@@ -57,11 +57,16 @@ When you run gulp, any new macros in the macros folder will be automatically joi
 
 **iMacros issues/notes)**
 
-1. Many essential window methods/properties such as window.console, window.alert, etc are blocked through iMacros. ) An unsafeWindow can be created that overcomes this, and in the library window is redefined as unsafeWindow early on.)
- realwindow is holding the real/original window object.)
+1. Many essential window methods/properties such as window.console, window.alert, etc are blocked through iMacros. An unsafeWindow can be created that overcomes this, and in the library window is redefined as unsafeWindow early on.
+ realwindow is holding the real/original window object.
 
-2. Accessing DOM elements, however, requires using the real/original window object's document. )
- document = realWindow.document)
+2. Accessing DOM elements, however, requires using the real/original window object's document.
+ document = realWindow.document
 
-3. Sometimes a "can't access dead object" error comes up when trying to access some property of an old document element). isDocAlive() checks if the document is dead. keepAlive() checks if the document is alive and revives it if it is dead.
+3. Sometimes a "can't access dead object" error comes up when trying to access some property of an old document element. isDocAlive() checks if the document is dead. keepAlive() checks if the document is alive and revives it if it is dead.
      
+=============
+
+**Todos**
+1. Fix gulpfile so that its watch/concat is up-to-date when a new file is added
+2. Add jQuery capability
