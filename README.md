@@ -11,45 +11,42 @@ I will no longer be maintaining this library. This was originally a pet project 
 When you run gulp, any new macros in the macros folder will be automatically joined with the library and put into the run folder. (I'm working on a quirk with gulp right now with the file watching...will update when its fixed! For now, if a new file is added, close (Ctrl+C) then restart gulp to have your new file compiled.)
 
 **General Functions**
-* debugOn()	debugOff()
-* log(message)	dlog(message))
-* alert(message)	dalert(message))
-* reload())
-* pause(time) //pause immediately)
-* isDocAlive() //checks if document is alive)
-* keepAlive())
+* $M.log(message)
+* $M.alert(message)
+* $M.goto(url)
+* $M.reload())
+* $M.pause(time) _pause immediately, seconds_
+* $M.csv.out(csvarray, filename)) 				_export csv_
+* $M.csv.in(file_name, line_num, fields_num))	_import csv_
+
+**Some Private Functions in Library**
+* isDocAlive() _checks if document is alive_
+* keepAlive()) _keeps document alive_
 * play(m))
 * setAttribute(element) //chooses which attribute to use for the TAG)
-* exportcsv(csvarray, filename))
-* importcsv(file_name, line_num, fields_num))
 
 **Main objects/functions)**
 * $M(selector, number) --> returns a Tag object with the element's type, attr, position)
-* Accepts a CSS selector and a number (if there are more than one matching elements).)
-* If no number is provided and there is more than one matching element, the first match is used.)
+	* Accepts a CSS selector and a number (if there are more than one matching elements).)
+	* If no number is provided and there is more than one matching element, the first match is used.)
 * Tag({type, attr, pos}) --> constructor for a tag element with relevant macro functions)
-
-* PLAY<br />
-	* .playAll	.playNow()	.playLater()
-	* .play(macro))
-	* .do(macro)//either store macro or play immediately depending on .playAll switch)
-	* .click())
-
-* EXTRACTION<br />
-	* .extract(extracttype, nolog))
-	* .download(opt_screenshot))
-	* DROPDOWN-SPECIFIC<br />
-		* .extractAll(nolog) //extracts all entries in the dropdown)
-		* .choose(chooseby, choice))
-		* .chooseByName(choice))
-		* .chooseByText(choice))
-		* .chooseByIndex(choice))
-		* .chooseCarefully(chooseby, choice) //chooses only if dropdown is loaded)
-		* .isLoaded() //true or false)
-		* .notLoaded() //true or false)
-				
-		
-	
+	* PLAY<br />
+		* .playAll	.playNow()	.playLater()
+		* .play(macro))
+		* .do(macro)//either store macro or play immediately depending on .playAll switch)
+		* .click())
+	* EXTRACTION<br />
+		* .extract(extracttype, nolog))
+		* .download(opt_screenshot))
+		* DROPDOWN-SPECIFIC<br />
+			* .extractAll(nolog) //extracts all entries in the dropdown)
+			* .choose(chooseby, choice))
+			* .chooseByName(choice))
+			* .chooseByText(choice))
+			* .chooseByIndex(choice))
+			* .chooseCarefully(chooseby, choice) //chooses only if dropdown is loaded)
+			* .isLoaded() //true or false)
+			* .notLoaded() //true or false)
 
 =============
 
